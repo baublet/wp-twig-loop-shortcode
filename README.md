@@ -1,11 +1,7 @@
 # Loop Shortcodes
-This WordPress plugin gives you the ability to call the Loop from shortcodes and style them using the [Twig template engine](http://twig.sensiolabs.org/). It allows you to use WordPress in a very frankenstein-like manner as a fairly sophisticated CMS, using inline templates in pages and posts which query other posts, users, and taxonomies on the fly.
+This WordPress plugin gives you the ability to call the Loop from shortcodes and style them using the [Twig template engine](http://twig.sensiolabs.org/). It allows you to use WordPress in a very frankenstein-like manner as a fairly powerful CMS, using inline templates in pages and posts which query other posts, users, and taxonomies on the fly.
 
 **Note:** This is *not* intended to be used in production without *significant* caching. Running WordPress and Twig, compiling Twig templates, making multiple WordPress WP_Query objects, and parsing dozens of posts is memory and processor-intensive.
-
-# Installation
-
-Todo
 
 # Usage
 
@@ -136,6 +132,18 @@ So this plugin provides a few helpers you can use in your query strings.
 {0}                     // And finally, in the last step, all single curly braces are converted into brackets ([ and ])
 ```
 
+This allows this:
+
+```
+posts_per_page=5&post_type=event&order=ASC&orderby=meta_value_num&meta_key=date&meta_query{0}{key}=date&meta_query{0}{value}={{lastweek}}&meta_query{0}{compare}={{>=}}&meta_query{0}{type}=numeric
+```
+
+To be passed into a query object as:
+
+```
+posts_per_page=5&post_type=event&order=ASC&orderby=meta_value_num&meta_key=date&meta_query[0][key]=date&meta_query[0][value]=1456442898&meta_query[0][compare]=%3E%3D&meta_query[0][type]=numeric
+```
+
 ## Templates
 
 You can put anything inside the shortcode as a template. But without helpers, that means nothing! So this plugin provides you with a host of assorted helpers to help you build posts from the loop output.
@@ -248,4 +256,12 @@ Allows you to call the `get_the_author_meta()` function in WordPress so that you
 
 Looks for an author with the id specified in the variable (in this instance, `otherauthor.id`), and returns the URL of their author page using WordPress's function, `get_author_posts_url()`.
 
-# Examples
+# Todo
+
+- [ ] Installation instructions
+- [ ] Add some examples
+- [ ] Fix the bug with WordPress' notoriously annoying texturizing and prettying of my damned query strings...
+- [ ] Add the ability to save templates in the tag to reduce code duplication
+  - Using `template=templatename` on the master and `load_template=templatename` on the others
+  - Also have it save the full shortcode, including the query,  environment, etc.
+  - Use WordPress' [built-in options functions](https://codex.wordpress.org/Creating_Options_Pages) to keep track of these
