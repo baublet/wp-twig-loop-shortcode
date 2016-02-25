@@ -2,7 +2,7 @@
 /* The basic loop shortcodes for posts of all post types */
 class LoopShortcodePosts extends LoopShortcodeBase {
 
-	public $default_template = '<article class=">
+	public $default_template = '<article class="post {{ post_class }}">
 		<h4><a href="{{ link }}" class="title" title="{{ excerpt|striptags|words(50) }}">{{ title|raw }}</a></h4>
 		<p>{{ excerpt|raw }}</p>
 		<div class="meta">
@@ -11,7 +11,7 @@ class LoopShortcodePosts extends LoopShortcodeBase {
 			<span class="comments"><span>{{ comments }}</span> {{ comments == 1 ? \'comment\' : \'comments\' }}</span>
 		</div>
 	</article>';
-	
+
 	public $default_attributes = array(
 		'query' => '',
 		'thumbnail_size' => 'thumbnail',
@@ -20,14 +20,14 @@ class LoopShortcodePosts extends LoopShortcodeBase {
 		'texturize' => 1,
 		'environment' => 'loop_shortcode',
 		'sticky' => 0,
-		'recall_environment' => false,
-		'recall_environment_type' => false
+		'recall_environment' => 0,
+		'recall_environment_type' => 0
 	);
 
 	public function doLoop($query) {
 		// Query the new posts
 		$loopObject = new WP_Query($query);
-		
+
 		//if($this->environment == 'main-events') print_r($loopObject);
 
 		$output = '';
@@ -61,7 +61,7 @@ class LoopShortcodePosts extends LoopShortcodeBase {
 				$twig_vars['post_type'] = $post->post_type;
 				$twig_vars['comments'] = $post->comment_count;
 				$twig_vars['comments_s'] = ($twig_vars['comments'] == 1) ? '' : 's';
-				
+
 				// Author information
 				$twig_vars['author']['id'] = $post->post_author;
 				$twig_vars['author']['username'] = get_the_author_meta('user_login', $twig_vars['author']['id']);
@@ -69,7 +69,7 @@ class LoopShortcodePosts extends LoopShortcodeBase {
 				$twig_vars['author']['page'] = get_author_posts_url($twig_vars['author']['id']);
 				$twig_vars['author']['link'] = get_the_author_meta('user_url', $twig_vars['author']['id']);
 				$twig_vars['author']['email'] = get_the_author_meta('user_email', $twig_vars['author']['id']);
-				
+
 				// Thumbnail details
 				$twig_vars['thumb'] = wp_get_attachment_image_src(get_post_thumbnail_id($twig_vars['id']), $this->thumbnail_size);
 				// Setup the thumbnail full image
@@ -97,7 +97,7 @@ class LoopShortcodePosts extends LoopShortcodeBase {
 						$twig_vars['categories'][] = $buffer;
 					}
 				}
-				
+
 				// Setup the custom fields
 				$twig_vars['custom'] = array();
 				$custom_buffer = get_post_meta($post->ID);
@@ -120,7 +120,7 @@ class LoopShortcodePosts extends LoopShortcodeBase {
 				$output .= $this->processTemplate($twig_vars);
 			endforeach;
 		endif;
-		
+
 		// Return the final output!
 		return $output;
 	}

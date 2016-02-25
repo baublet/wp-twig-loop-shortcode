@@ -1,7 +1,7 @@
 <?php
 
 // Load Twig
-require_once dirname(__FILE__) . '/Twig/Autoloader.php';
+require_once dirname(__FILE__) . '/Twig/lib/Twig/Autoloader.php';
 Twig_Autoloader::register();
 // Initiate Twig
 $loop_shortcode_twig_loader = new Twig_Loader_Array(array());
