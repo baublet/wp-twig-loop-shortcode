@@ -17,6 +17,8 @@ Once the plugin is enabled, you will be able to call it with the shortcode:
 
 ## Examples
 
+### Post Loops
+
 ```html
 <ul class="news-feed">
 
@@ -352,7 +354,11 @@ Looks for an author with the id specified in the variable (in this instance, `ot
 
 - [ ] Installation instructions
 - [ ] Add some examples
+  - [X] Post loops
+  - [ ] User loops
+  - [ ] Taxonomy loops
 - [ ] Fix the bug with WordPress' notoriously annoying texturizing and prettying of my damned query strings...
+  - I tried to reproduce this and failed...
 - [ ] Add the ability to save templates in the tag to reduce code duplication
   - Using `template=templatename` on the master and `load_template=templatename` on the others
   - Also have it save the full shortcode, including the query,  environment, etc.
