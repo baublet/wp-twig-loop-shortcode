@@ -15,6 +15,98 @@ Once the plugin is enabled, you will be able to call it with the shortcode:
 
 **Note:** Because of the way WordPress works, you need to close your loop tag whether or not you use a custom template.
 
+## Examples
+
+```html
+<ul class="news-feed">
+
+[loop query="posts_per_page=3&cat=5&date_query{}{after}=1 month ago" environment=sticky]
+    {# ############################################## #}
+    {# Action Items! And yes, Twig comments work here #}
+    {# ############################################## #}
+    
+    <li class="action">
+        <h4><a href="{{ link }}" title="{{ title|titlesafe }}">{{ title|raw }}</a></h4>
+        <div class="description">
+            {{ excerpt|raw }} <a href="{{ link }}" title="Read more about {{ title|titlesafe }}">Read more...</a>
+        </div>
+        <div class="meta">
+            Last update: {{ modified_ago }} ago
+        </div>
+    </li>
+[/loop]
+
+[loop query="" sticky=1 environment="sticky"]
+    {# ######################### #}
+    {# Loads up our sticky posts #}
+    {# ######################### #}
+    
+    <li class="sticky">
+        <h4>
+            <a href="{{ link }}" title="{{ excerpt|words(50)|titlesafe }}">{{ title|title|raw }}{{ title|subtitle(' <span class="subtitle"><span class="screen-reader-text">:</span>','</span>')|raw }}</a>
+        </h4>
+    </li>
+    
+[/loop]
+
+[loop query="posts_per_page=10&cat=4,25,20,-410" content=0 environment=main-news recall_environment="sticky" recall_environment_type="post__not_in"]
+    {# ############### #}
+    {# Main News Items #}
+    {# ############### #}
+
+    {# This calls our regular posts without the items we loaded as sticky posts or action items. #}
+    
+    {# Give it an "new" class if it was posted within the last two weeks. #}
+    <li{% if age < 1204800  %} class="new"{% endif %}>
+        <h4>
+            <a href="{{ link }}" title="{{ excerpt|words(50)|titlesafe }}">{{ title|title|raw }}{{ title|subtitle(' <span class="subtitle"><span class="screen-reader-text">:</span>','</span>')|raw }}</a>
+        </h4>
+    <div class="meta">
+    {% if 27 in category_ids or 405 in category_ids %}
+        {# In this example, we only include the author in certain categories #}
+        <span class="author a{{ author.id }}">
+            {# Include the first, primary author always. #}
+            by <a href="{{ author.page }}" title="View all posts by {{ author.display_name }}" class="name">{{ author.display_name|trim }}</a>
+            
+            {# In this snippet, we're including the other authors if there are any #}
+            {% if custom.OtherAuthor is not iterable and custom.OtherAuthor > 0 %}
+                {# This is run if there is only a single other author. #}
+                and
+                <a href="{{ custom.OtherAuthor|wpgetauthorpage }}" title="View all posts by {{ custom.OtherAuthor|wpauthormeta('display_name') }}" class="name">
+                    {{ custom.OtherAuthor|wpauthormeta('display_name') }}
+                </a>
+            {% else %}
+                {# Now, let's loop through the custom keys called OtherAuthor if there are multiple #}
+                {% for otherid in custom.OtherAuthor %}
+                    {# The below snippet outputs ", and" if this is the last item in this loop, otherwise it outputs ", " #}
+                    {{ loop.last ? ', and ' : ', ' }}
+                    <a href="{{ otherid|wpgetauthorpage }}" title="View all posts by {{ otherid|wpauthormeta('display_name') }}" class="name">
+                      {{ otherid|wpauthormeta('display_name') }}
+                    </a>
+                {% endfor %}
+            {% endif %}
+        </span>
+        {# Now, let's output the categories #}
+        <span class="categories">
+            {% if categories > 1 %}
+                {% for category in categories %}
+                    <a href="{{ category.link }}">{{ category.name }}</a>
+                    {{ loop.last ? '' : ', ' }}
+                {% endfor %}
+            {% elseif categories == 1 %}
+                <a href="{{ category.0.link }}">{{ category.0.name }}</a>
+            {% endif %}
+        </span>
+    {% endif %}
+    </div>
+</li>
+[/loop]
+
+</ul>
+```
+
+This is a very sophisticated example, but it should give you an idea of most of this plugin's functions.
+
 ## Arguments
 
 Require arguments:
@@ -28,7 +120,7 @@ Optional arguments:
 * `sticky` Boolean (1 or 0). If 1, this function will include sticky posts. Default is 0. **Note:** it's a good idea to leave this off, as sticky posts will *always* be included when this is true, even if, for example, they aren't in the category you specify. One strategy for avoiding this is to include sticky posts in a separate loop above the items you want to regularly include.
 * `environment` String. The name of this environment. (More information below.) Default: `'loop_shortcode'`.
 * `recall_environment` Boolean (1 or 0). If 1, this will include the posts listed in the `environment` variable into this query using the `recall_environment_type` comparator. Default is 0
-* `recall_environment_type` String. Comparator to use in your queries to either include or exclude (or some other type of comparison I'm not aware of) with post IDs in certain environments. The most popular and useful of these is `post__not_in`.
+* `recall_environment_type` String. Comparator to use in your queries to either include or exclude (or some other type of comparison I'm not aware of) with post IDs in certain environments. Default: `post__not_in`.
 
 ### Environments
 
@@ -52,7 +144,7 @@ This way, the posts you render in template 2 aren't the same ones you rendered i
 
 In the backend, this means that each ID is added to a PHP associative array:
 ```php
-environments['environment-name'] = array(post, ids, are, here, as integers);
+environments['environment-name'] = array(post, ids, are, here, as_integers);
 ```
 
 Environments are created linearly (e.g., the first shortcode in the post code has first dibs on posts). You can also build environments without necessarily using them, as all posts are stored on a default environment called `loop_shortcode`. When you want to recall an environment, the plugin simply appends the following string to your query:

@@ -21,7 +21,7 @@ class LoopShortcodePosts extends LoopShortcodeBase {
 		'environment' => 'loop_shortcode',
 		'sticky' => 0,
 		'recall_environment' => 0,
-		'recall_environment_type' => 0
+		'recall_environment_type' => 'post__not_in'
 	);
 
 	public function doLoop($query) {
