@@ -73,6 +73,7 @@ class LoopShortcodeBase implements LoopShortcode {
 	// Cleans the template for correct processing
 	public function prepareTemplate($template = null) {
 		/* Because WordPress shortcodes aren't really made for Twig, we have to do some cleaning of the template so that when it does its own auto-p work, it doesn't mess up what's shown here. Also removes excess spaces for us poor designers... */
+		error_log('Original Template: ' . $template);
 		if($template) {
 			$this->template = $template;
 		} else {
@@ -84,15 +85,17 @@ class LoopShortcodeBase implements LoopShortcode {
 			$this->template = '';
 			foreach($template_lines as $line) {
 				$line = trim($line);
-				if(!empty($line)) $this->template .= $line;
+				if(!empty($line)) $this->template .= $line . ' ';
 			}
 		}
 		$this->template = str_replace("\t", ' ', $this->template);
-		// For some reason, WordPress sometimse texturizes and HTML entities shit for no apparent reason.
+		// For some reason, WordPress sometimse texturizes and HTML entities stuff that we don't necessarily want prettified
 		// This replaces that with what is supposed to be there.
 		$this->template = str_replace(array('&#8220;', '&#8221;'), '"' , $this->template);
 		$this->template = str_replace(array('&#8216;', '&#8217;'), '\'' , $this->template);
 		$this->template = preg_replace("/\s\s+/", " ", $this->template);
+		
+		error_log('Defunkified Template: ' . $this->template);
 		
 		// Finally, this tells the Twig loader to set this template as the one to use
 		$this->twig_environment->getLoader()->setTemplate($this->environment, $this->template);
@@ -105,7 +108,8 @@ class LoopShortcodeBase implements LoopShortcode {
 		//	Can be used for, e.g., showing events that have already happened for a week
 		//	after they have happened
 		//echo $this->environment . '<br>';
-		//echo 'Original Query: ' . $this->query.'<br>';
+		error_log('Environment: ' . $this->environment);
+		error_log('Original Query: ' . $this->query);
 		$thetime = time();
 		$this->query = str_replace('{{now}}', date('Ymd', $thetime), $this->query);
 		$this->query = str_replace('{{tomorrow}}', date('Ymd', $thetime+86400), $this->query);
@@ -114,16 +118,16 @@ class LoopShortcodeBase implements LoopShortcode {
 		$this->query = str_replace('{{lastweek}}', date('Ymd', $thetime-604800), $this->query);
 		$this->query = str_replace('{{nextmonth}}', date('Ymd', $thetime+2592000), $this->query);
 		$this->query = str_replace('{{lastmonth}}', date('Ymd', $thetime-2592000), $this->query);
-		//echo 'Replacers: ' . $this->query.'<br>';
+		error_log('Query after Replacers: ' . $this->query);
 		if($this->sticky) {
-			if($this->stick_posts === false) {
+			if($this->sticky_posts === false) {
 				$this->sticky_posts = get_option('sticky_posts');
 			}
 			if(count($this->sticky_posts)) {
 				$this->query .= '&post__in{}=' . implode('&post__in{}=', (array) $this->sticky_posts);
 			}
 		}
-		//echo 'Sticky: ' . $this->query.'<br>';
+		error_log('Query after Sticky: ' . $this->query);
 		// Setup the recalled environment ids
 		$recalled_environments = '0';
 		if($this->recall_environment) {
@@ -146,7 +150,7 @@ class LoopShortcodeBase implements LoopShortcode {
 				$this->query .= '&' . $this->recall_environment_type . '[]=' . $id;
 			}
 		}
-		//echo 'Recalled Environments: ' . $this->query.'<br>';
+		error_log('Query after Recalled Environments: ' . $this->query);
 		// Allows you to use URL encoding by surrounding those statements in {{stuffhere}}
 		$this->query = preg_replace_callback(
 							"/({{)([^}}]+)(}})/",
@@ -154,19 +158,20 @@ class LoopShortcodeBase implements LoopShortcode {
 								return urlencode($matches[2]);
 							},
 							$this->query);
-		//echo 'After Preg: ' . $this->query.'<br>';
+		error_log('Query after Preg: ' . $this->query);
 		// This allows you to use brackets in your query by using curly braces instead
 		$this->query = str_replace(array('{','}'),array('[',']'), $this->query);
 		// This makes sure your &s don't get converted to hex, and that your query doesn't
 		// get surrounded with quotes (as happens for mysterious WP reasons)
 		$this->query = html_entity_decode($this->query);
 		$this->query = str_replace(array('”', '″'), '', $this->query);
-		//echo 'Final Query: ' . $this->query.'<hr>';
+		error_log('Final Query: ' . $this->query);
 	}
 	
 	// This is the function that's called by WordPress when it wants this class to process a shortcode
 	public function processShortcode($attributes, $template = null) {
 		$this->reset();
+		error_log('########################## Loading new Loop Query!');
 		$this->attributes = $attributes;
 		$this->extractAttributes($attributes);
 		$this->prepareTemplate($template);
@@ -175,6 +180,8 @@ class LoopShortcodeBase implements LoopShortcode {
 		if($this->texturize) {
 			$output = wptexturize($output);
 		}
+		error_log('##########################');
+		error_log(' ');
 		return $output;
 	}
 	

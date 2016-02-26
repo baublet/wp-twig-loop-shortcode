@@ -49,12 +49,12 @@ class LoopShortcodePosts extends LoopShortcodeBase {
 				$twig_vars['modified_time'] = mysql2date('U', $twig_vars['modified']);
 				$twig_vars['modified_age'] = abs(time() - $twig_vars['modified_time']);
 				$twig_vars['modified_ago'] = human_time_diff($twig_vars['modified_time'], time());
-				if($load_content) {
+				if($this->content) {
 					$twig_vars['content'] = $post->post_content;
 					$twig_vars['content'] = apply_filters('the_content', $twig_vars['content']);
-					$twig_vars['excerpt'] = FALSE;
+					$twig_vars['excerpt'] = '';
 				} else {
-					$twig_vars['content'] = FALSE;
+					$twig_vars['content'] = '';
 					$twig_vars['excerpt'] = get_extended($post->post_content);
 					$twig_vars['excerpt'] = strip_shortcodes($twig_vars['excerpt']['main']);
 				}

@@ -88,18 +88,18 @@ Once the plugin is enabled, you will be able to call it with the shortcode:
                 {% endfor %}
             {% endif %}
         </span>
-        {# Now, let's output the categories #}
-        <span class="categories">
-            {% if categories > 1 %}
-                {% for category in categories %}
-                    <a href="{{ category.link }}">{{ category.name }}</a>
-                    {{ loop.last ? '' : ', ' }}
-                {% endfor %}
-            {% elseif categories == 1 %}
-                <a href="{{ category.0.link }}">{{ category.0.name }}</a>
-            {% endif %}
-        </span>
     {% endif %}
+    <span class="date" title="{{ date }}">{{ ago }} ago</span>,
+    {# Now, let's output the categories #}
+    <span class="categories">
+        {% if categories > 1 %}
+            {% for category in categories %}
+                <a href="{{ category.link }}">{{ category.name }}</a>
+            {% endfor %}
+        {% elseif categories == 1 %}
+            <a href="{{ category.0.link }}">{{ category.0.name }}</a>
+        {% endif %}
+    </span>
     </div>
 </li>
 [/loop]
