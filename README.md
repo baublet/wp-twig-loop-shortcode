@@ -26,7 +26,7 @@ Once the plugin is enabled, you will be able to call it with the shortcode:
     {# ############################################## #}
     {# Action Items! And yes, Twig comments work here #}
     {# ############################################## #}
-    
+
     <li class="action">
         <h4><a href="{{ link }}" title="{{ title|titlesafe }}">{{ title|raw }}</a></h4>
         <div class="description">
@@ -42,13 +42,13 @@ Once the plugin is enabled, you will be able to call it with the shortcode:
     {# ######################### #}
     {# Loads up our sticky posts #}
     {# ######################### #}
-    
+
     <li class="sticky">
         <h4>
             <a href="{{ link }}" title="{{ excerpt|words(50)|titlesafe }}">{{ title|title|raw }}{{ title|subtitle(' <span class="subtitle"><span class="screen-reader-text">:</span>','</span>')|raw }}</a>
         </h4>
     </li>
-    
+
 [/loop]
 
 [loop query="posts_per_page=10&cat=4,25,20,-410" content=0 environment=main-news recall_environment="sticky" recall_environment_type="post__not_in"]
@@ -57,7 +57,7 @@ Once the plugin is enabled, you will be able to call it with the shortcode:
     {# ############### #}
 
     {# This calls our regular posts without the items we loaded as sticky posts or action items. #}
-    
+
     {# Give it an "new" class if it was posted within the last two weeks. #}
     <li{% if age < 1204800  %} class="new"{% endif %}>
         <h4>
@@ -69,7 +69,7 @@ Once the plugin is enabled, you will be able to call it with the shortcode:
         <span class="author a{{ author.id }}">
             {# Include the first, primary author always. #}
             by <a href="{{ author.page }}" title="View all posts by {{ author.display_name }}" class="name">{{ author.display_name|trim }}</a>
-            
+
             {# In this snippet, we're including the other authors if there are any #}
             {% if custom.OtherAuthor is not iterable and custom.OtherAuthor > 0 %}
                 {# This is run if there is only a single other author. #}
@@ -360,6 +360,6 @@ Looks for an author with the id specified in the variable (in this instance, `ot
 - [ ] Fix the bug with WordPress' notoriously annoying texturizing and prettying of my damned query strings...
   - I tried to reproduce this and failed...
 - [ ] Add the ability to save templates in the tag to reduce code duplication
-  - Using `template=templatename` on the master and `load_template=templatename` on the others
-  - Also have it save the full shortcode, including the query,  environment, etc.
-  - Use WordPress' [built-in options functions](https://codex.wordpress.org/Creating_Options_Pages) to keep track of these
+  - [x] Basic functionality via a backend menu (Appearance -> Loop Shortcode)
+  - [ ] Give it ability to save the full shortcode, including the query,  environment, etc.
+  - [x] Use WordPress' [built-in options functions](https://codex.wordpress.org/Creating_Options_Pages) to keep track of these
