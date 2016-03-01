@@ -1,20 +1,21 @@
 <?php
 /* The basic loop shortcodes for posts of all post types */
 class LoopShortcodeTerms extends LoopShortcodeBase {
-	
+
 	public $shortcode = 'termloop';
 
 	public $default_template = '<span class="term"><a href="{{ link|raw }}">{{ title }}</a></span>';
-	
+
 	public $default_attributes = array(
 		'query' => '',
 		'nl2br' => 0,
 		'texturize' => 1,
 		'environment' => 'termloop_shortcode',
 		'recall_environment' => false,
-		'recall_environment_type' => false
+		'recall_environment_type' => false,
+		'template' => 0
 	);
-	
+
 	public function parseQuery($query) {
 		$elements = array();
 		parse_str($query, $elements);
@@ -60,7 +61,7 @@ class LoopShortcodeTerms extends LoopShortcodeBase {
 				$output .= $this->processTemplate($twig_vars);
 			endforeach;
 		endif;
-		
+
 		// Return the final output!
 		return $output;
 	}

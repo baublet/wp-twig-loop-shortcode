@@ -1,7 +1,7 @@
 <?php
 /* The basic loop shortcodes for posts of all post types */
 class LoopShortcodeUsers extends LoopShortcodeBase {
-	
+
 	public $shortcode = 'userloop';
 
 	public $default_template = '<div class="user">
@@ -10,13 +10,14 @@ class LoopShortcodeUsers extends LoopShortcodeBase {
 	{{ url }}
 	{{ affiliation }}
 	</div>';
-	
+
 	public $default_attributes = array(
 		'query' => '',
 		'avatar_size' => 32,
 		'nl2br' => 0,
 		'texturize' => 1,
-		'environment' => 'userloop_shortcode'
+		'environment' => 'userloop_shortcode',
+		'template' => 0
 	);
 
 	public function doLoop($query) {
@@ -51,7 +52,7 @@ class LoopShortcodeUsers extends LoopShortcodeBase {
 							)
 						);
 	  			$twig_vars['meta'] = $meta;
-				
+
 				// Run that data through the template
 				$output .= $this->processTemplate($twig_vars);
 		    }
