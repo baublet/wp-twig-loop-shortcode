@@ -19,7 +19,7 @@ class LoopShortcodeBase implements LoopShortcode {
 			$avatar_size = 32,
 			$environment = 'loop_shortcode',
 			$recall_environment = 'loop_shortcode',
-			$recall_environment_type = false;
+			$recall_environment_type = 'post__not_in';
 
 	// Special
 	public	$template = '',
