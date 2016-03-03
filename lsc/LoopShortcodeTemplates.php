@@ -25,13 +25,32 @@ class LoopShortcodeTemplates {
         }
     }
 
-    public function set($template, $content) {
+    public function set($template, $content, $options) {
         $slug  = $this->generate_slug($template);
         $this->templates[$slug] = array(
                 'slug' => $slug,
                 'name' => $template,
                 'template' => $content
         );
+        $query = $options['query'];
+        $thumbnail_size = $options['thumbnail_size'];
+        $nl2br = $options['nl2br'];
+        $texturize = $options['texturize'];
+        $sticky = $options['sticky'];
+        $environment = $options['environment'];
+        $recall_environment = $options['recall_environment'];
+        $recall_environment_type = $options['recall_environment_type'];
+        $this->templates[$slug]['options'] =
+            array(
+                'query' => $query,
+                'thumbnail_size' => $thumbnail_size,
+                'nl2br' => $nl2br,
+                'texturize' => $texturize,
+                'sticky' => $sticky,
+                'environment' => $environment,
+                'recall_environment' => $recall_environment,
+                'recall_environment_type' => $recall_environment_type
+            );
         $this->save();
     }
 
