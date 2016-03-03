@@ -62,20 +62,26 @@ class LoopShortcodeBase implements LoopShortcode {
 	}
 
 	// Extracts the default options and attributes
-	public function extractAttributes($attributes) {
-		if(!is_array($attributes)) {
+	public function extractAttributes($user_attributes) {
+		if(!is_array($user_attributes)) {
 			throw new Exception('LoopShortcode::extractAttributes($attributes) requires $attributes to be an array.');
 		}
-		$attributes = shortcode_atts($this->default_attributes, $attributes, $this->shortcode);
+		$attributes = shortcode_atts($this->default_attributes, $user_attributes, $this->shortcode);
 		if(isset($attributes['template'])) {
 			$template = $this->templates->get($attributes['template']);
 			if($template) $this->default_template = $template['template'];
-			if($template) error_log("################################# LOADED TEMPLATE: " . $attributes['template']);
-			if($template) error_log("#################################################: " . $template);
 			unset($attributes['template']);
 		}
 		foreach($attributes as $key => $value) {
-			$this->$key = $value;
+			if(isset($user_attributes[$key])) {
+				$this->$key = $value;
+			} else {
+				if(!empty($template['options'][$key])) {
+					$this->$key = $template['options'][$key];
+				} else {
+					$this->$key = $value;
+				}
+			}
 		}
 	}
 

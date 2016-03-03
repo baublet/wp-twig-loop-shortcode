@@ -103,7 +103,7 @@ class LoopShortcodeMenu {
                     <div class="main" style="margin-right: 210px;">
                         <input type="text" style="width:100%" name="name" placeholder="Template name, e.g. Main Site Magazine-Style Posts" value="<?=$template["name"]?>">
                         <?=($template !== false)? "<br>Slug: <strong>" . $template['slug'] . "</strong> (slugs cannot be edited)<input type=\"hidden\" name=\"slug\" value=\"".$template['slug']."\">" : ''?><br>
-                        <input type="text" style="width:100%" name="options[query]" placeholder="Query, e.g. posts_per_page=3&cat=5&date_query{}{after}=1 month ago" value="<?=$template["query"]?>">
+                        <input type="text" style="width:100%" name="options[query]" placeholder="Query, e.g. posts_per_page=3&cat=5&date_query{}{after}=1 month ago" value="<?=$template['options']['query']?>">
                         <br>
                         <textarea name="template" id="template" cols="40" style="height: 250px; width:100%" placeholder="Put your template here, with any and all HTML you want!"><?=htmlspecialchars($template["template"])?></textarea>
                         <br>
