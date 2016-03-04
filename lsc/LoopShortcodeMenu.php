@@ -14,13 +14,15 @@ class LoopShortcodeMenu {
         $this->templates = $templates;
         switch($_GET["lsc-action"]) {
             case "new":
-                $this->templates->set($_POST["name"], $_POST["template"], $_POST["options"]);
+                if(isset($_POST["template"]) || isset($_POST["options"]))
+                    $this->templates->set($_POST["name"], $_POST["template"], $_POST["options"]);
                 break;
             case "delete":
                 $this->templates->delete($_GET["slug"]);
                 break;
             case "update":
-                $this->templates->set($_POST["slug"], $_POST["template"], $_POST["options"]);
+                if(isset($_POST["template"]) || isset($_POST["options"]))
+                    $this->templates->set($_POST["name"], $_POST["template"], $_POST["options"]);
                 break;
             case "clear":
                 $this->templates->clear();
@@ -43,8 +45,7 @@ class LoopShortcodeMenu {
         <div class="wrap">
             <h2>Loop Shortcodes</h2>
             <hr>
-                <a href="#new">New Template</a> |
-                <a href="?page=lsc-menu&lsc-action=clear">Clear Templates</a>
+                <a href="#new">New Template</a>
             <hr>
             <?php foreach($this->templates->templates as $key => $template) {
                 $this->display_template_form($template);
@@ -75,7 +76,7 @@ class LoopShortcodeMenu {
             $recall_environment_type = $template['options']['recall_environment_type'];
         }
         ?>
-        <div <?=(!$template) ? 'class="postbox" style="margin-top:24px;"' : 'id="new"' ?> id="template_container<?=(!$template)? 'new' : $template['name']?>">
+        <div class="postbox" style="margin-top:24px;" id="<?=(!$template)? 'new' : $template['name']?>">
             <?=($template === false)? "<h2 style=\"padding:0 12px\">New Template</h2><hr>" : '' ?>
             <div class="inside">
                 <form method="post" action="?page=lsc-menu&lsc-action=<?=(!$template)? 'new' : 'update' ?>">
@@ -101,7 +102,7 @@ class LoopShortcodeMenu {
                         <label for="renvt">Recollection Type</label><br><input type="text" name="options[recall_environment_type]" id="renvt" value="<?=htmlspecialchars($recall_environment_type)?>">
                     </div>
                     <div class="main" style="margin-right: 210px;">
-                        <input type="text" style="width:100%" name="name" placeholder="Template name, e.g. Main Site Magazine-Style Posts" value="<?=$template["name"]?>">
+                        <input type="text" style="width:100%;font-size:1.5rem;" name="name" placeholder="Template name, e.g. Main Site Magazine-Style Posts" value="<?=$template["name"]?>">
                         <?=($template !== false)? "<br>Slug: <strong>" . $template['slug'] . "</strong> (slugs cannot be edited)<input type=\"hidden\" name=\"slug\" value=\"".$template['slug']."\">" : ''?><br>
                         <input type="text" style="width:100%" name="options[query]" placeholder="Query, e.g. posts_per_page=3&cat=5&date_query{}{after}=1 month ago" value="<?=$template['options']['query']?>">
                         <br>
