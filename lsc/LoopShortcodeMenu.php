@@ -31,7 +31,7 @@ class LoopShortcodeMenu {
     public function create_menu() {
         add_submenu_page(   'themes.php',
                             'Loop Shortcode Settings',
-                            'Loop Shorcode',
+                            'Loop Shortcode',
                             'manage_options',
                             'lsc-menu',
                             array($this, 'display_options_page')
