@@ -111,7 +111,7 @@ This is a very sophisticated example, but it should give you an idea of most of 
 
 ## Arguments
 
-Require arguments:
+Required arguments:
 * `query` Your custom query to grab posts. (More detail below.)
 
 Optional arguments:
@@ -357,9 +357,10 @@ Looks for an author with the id specified in the variable (in this instance, `ot
   - [X] Post loops
   - [ ] User loops
   - [ ] Taxonomy loops
-- [ ] Fix the bug with WordPress' notoriously annoying texturizing and prettying of my damned query strings...
+- [x] Fix the bug with WordPress' notoriously annoying texturizing and prettying of my damned query strings...
   - I tried to reproduce this and failed...
 - [ ] Add the ability to save templates in the tag to reduce code duplication
   - [x] Basic functionality via a backend menu (Appearance -> Loop Shortcode)
-  - [ ] Give it ability to save the full shortcode, including the query,  environment, etc.
+  - [x] Give it ability to save the full shortcode, including the query,  environment, etc.
   - [x] Use WordPress' [built-in options functions](https://codex.wordpress.org/Creating_Options_Pages) to keep track of these
+  - [ ] Separate the ability to do posts, authors, and meta tags
