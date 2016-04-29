@@ -42,6 +42,42 @@ class LoopShortcodeMenu {
 
     public function display_options_page() {
         ?>
+        <style type="text/css">
+          #new:target {
+            -webkit-animation-name: blinker;
+            -webkit-animation-duration: .5s;
+            -webkit-animation-timing-function: linear;
+            -webkit-animation-iteration-count: 2;
+
+            -moz-animation-name: blinker;
+            -moz-animation-duration: .5s;
+            -moz-animation-timing-function: linear;
+            -moz-animation-iteration-count: 2;
+
+            animation-name: blinker;
+            animation-duration: .5s;
+            animation-timing-function: linear;
+            animation-iteration-count: 2;
+          }
+
+          @-moz-keyframes blinker {
+              0% { opacity: 1.0; }
+              50% { opacity: 0.0; }
+              100% { opacity: 1.0; }
+          }
+
+          @-webkit-keyframes blinker {
+              0% { opacity: 1.0; }
+              50% { opacity: 0.0; }
+              100% { opacity: 1.0; }
+          }
+
+          @keyframes blinker {
+              0% { opacity: 1.0; }
+              50% { opacity: 0.0; }
+              100% { opacity: 1.0; }
+          }
+        </style>
         <div class="wrap">
             <h2>Loop Shortcodes  <a href="#new" class="page-title-action">Add New</a></h2>
             <?php foreach($this->templates->templates as $key => $template) {
@@ -76,7 +112,7 @@ class LoopShortcodeMenu {
         ?>
         <?php if($template): ?><div class="postbox" style="margin-top:24px;" id="<?=$template['name']?>"><?php endif; ?>
             <?=($template === false)? "<h2>New Template</h2>" : "" ?>
-            <div class="inside">
+            <div class="inside"<?=(!$template)? ' id="new"' : '' ?>>
                 <form method="post" action="?page=lsc-menu&lsc-action=<?=(!$template)? 'new' : 'update' ?>">
                     <div class="options" style="width:200px;float:right;">
                         <h3>Options</h3>
