@@ -25,8 +25,8 @@ class LoopShortcodeTemplates {
         }
     }
 
-    public function set($template, $content, $options) {
-        $slug  = $this->generate_slug($template);
+    public function set($template, $content, $options, $slug = null) {
+        $slug  = ($slug == null) ? $this->generate_slug($template) : $slug;
         $this->templates[$slug] = array(
                 'slug' => $slug,
                 'name' => $template,

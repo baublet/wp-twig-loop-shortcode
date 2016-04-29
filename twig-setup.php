@@ -1,8 +1,10 @@
 <?php
 
 // Load Twig
-require_once dirname(__FILE__) . '/Twig/lib/Twig/Autoloader.php';
-Twig_Autoloader::register();
+if(!class_exists("Twig_Autoloader")) {
+	require_once dirname(__FILE__) . '/Twig/lib/Twig/Autoloader.php';
+	Twig_Autoloader::register();
+}
 // Initiate Twig
 $loop_shortcode_twig_loader = new Twig_Loader_Array(array());
 $loop_shortcode_twig = new Twig_Environment($loop_shortcode_twig_loader);
