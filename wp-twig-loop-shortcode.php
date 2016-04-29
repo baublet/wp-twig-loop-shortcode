@@ -1,9 +1,9 @@
 <?php
 /*
-Plugin Name:    Loop Shortcode
+Plugin Name:    Twig Loop Shortcode
 Plugin URI:     http://www.ryanmpoe.com
 Description:    A Twig-themeable shortcode wrapper for putting loops in pages and widgets
-Version:        0.1
+Version:        0.3
 Author:         Ryan Poe
 Author URI:     http://www.ryanmpoe.com
 */
