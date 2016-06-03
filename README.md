@@ -1,3 +1,9 @@
+# Changes
+
+#### June 3, 2016
+
+Added much in the way of documentation and improved the backend display a bit.
+
 # Loop Shortcodes
 This WordPress plugin gives you the ability to call the Loop from shortcodes and style them using the [Twig template engine](http://twig.sensiolabs.org/). It allows you to use WordPress in a very frankenstein-like manner as a fairly powerful CMS, using inline templates in pages and posts which query other posts, users, and taxonomies on the fly.
 

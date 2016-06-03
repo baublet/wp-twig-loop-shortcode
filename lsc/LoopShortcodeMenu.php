@@ -43,6 +43,23 @@ class LoopShortcodeMenu {
     public function display_options_page() {
         ?>
         <style type="text/css">
+          .helper-input {display:none !important}
+          .helper-input + .postbox {display:none !important}
+          .helper-input:checked + .postbox,
+          .helper-input + .postbox.new {display:block !important}
+          .lsc-menu {display:flex;align-items:center;}
+          .template-label {
+            cursor: pointer;
+            padding: .5rem;
+            border: 1px solid rgba(0, 0, 0, .1);
+            background: rgba(0, 0, 0, .01);
+            border-radius: 5px;
+            margin-left: .5rem;
+          }
+          .template-label:hover {
+            border-color: rgba(0,0,0,.5);
+            background: rgba(0,0,0,.1);
+          }
           #new:target {
             -webkit-animation-name: blinker;
             -webkit-animation-duration: .5s;
@@ -80,10 +97,17 @@ class LoopShortcodeMenu {
         </style>
         <div class="wrap">
             <h2>Loop Shortcodes  <a href="#new" class="page-title-action">Add New</a></h2>
+            <hr>
+            <div class="lsc-menu">
+              <span><strong>Templates</strong><em>(click to edit)</em><strong>:</strong></span>
+              <?php foreach($this->templates->templates as $key => $template): ?>
+                <label for="<?=$template["slug"]?>" class="template-label"><?=$template["name"]?></label>
+              <?php endforeach; ?>
+            </div>
+            <hr>
             <?php foreach($this->templates->templates as $key => $template) {
                 $this->display_template_form($template);
             } ?>
-          <hr>
           <?=$this->display_template_form()?>
         </div>
         <?php
@@ -110,8 +134,11 @@ class LoopShortcodeMenu {
             $recall_environment_type = $template['options']['recall_environment_type'];
         }
         ?>
-        <?php if($template): ?><div class="postbox" style="margin-top:24px;" id="<?=$template['name']?>"><?php endif; ?>
-            <?=($template === false)? "<h2>New Template</h2>" : "" ?>
+        <?php if($template): ?>
+          <input type="radio" name="lsc-selector" id="<?=$template['slug']?>" class="helper-input">
+          <div class="postbox" style="margin-top:24px;" id="<?=$template['name']?>">
+        <?php endif; ?>
+            <?= ($template === false) ? "<h2>New Template</h2>" : "" ?>
             <div class="inside"<?=(!$template)? ' id="new"' : '' ?>>
                 <form method="post" action="?page=lsc-menu&lsc-action=<?=(!$template)? 'new' : 'update' ?>">
                     <div class="options" style="width:200px;float:right;">
