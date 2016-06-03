@@ -3,6 +3,36 @@ This WordPress plugin gives you the ability to call the Loop from shortcodes and
 
 **Note:** This is *not* intended to be used in production without *significant* caching. Running WordPress and Twig, compiling Twig templates, making multiple WordPress WP_Query objects, and parsing dozens of posts is memory and processor-intensive.
 
+# Installation
+
+SSH into your WordPress plugins directory. It's typically ```wordpress/wp-content/plugins```. Then, clone this repo into that directory via:
+
+```
+git clone https://github.com/baublet/wp-twig-loop-shortcode.git
+```
+
+It will download into ```plugins/wp-twig-loop-shortcode```. Once that is done, you have to download the Twig submodule. To do that:
+
+```
+cd wp-twig-loop-shortcode
+git submodule init
+git submodule update
+```
+
+These commands navigate the SSH shell to the plugin directory and initiate the submodules. Then, git will download Twig from the Twig repo.
+
+Once all that is done, you can then turn on the plugin in your WordPress plugin directory.
+
+## Updates
+
+To update the plugin to the latest version, ssh into your ```wp-content/plugins/wp-twig-loop-shortcode/``` directory and simply type
+
+```
+git pull
+```
+
+It will update the plugin to the latest version!
+
 # Usage
 
 Once the plugin is enabled, you will be able to call it with the shortcode:
