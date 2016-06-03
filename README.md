@@ -446,17 +446,3 @@ Allows you to call the `get_the_author_meta()` function in WordPress so that you
 ```
 
 Looks for an author with the id specified in the variable (in this instance, `otherauthor.id`), and returns the URL of their author page using WordPress's function, `get_author_posts_url()`.
-
-# Todo
-
-- [x] Installation instructions
-- [x] Add some examples
-  - [X] Post loops
-  - [x] User loops
-  - [x] Taxonomy loops
-- [x] Fix the bug with WordPress' notoriously annoying texturizing and prettying of my damned query strings...
-  - I tried to reproduce this and failed...
-- [x] Add the ability to save templates in the tag to reduce code duplication
-  - [x] Basic functionality via a backend menu (Appearance -> Loop Shortcode)
-  - [x] Give it ability to save the full shortcode, including the query,  environment, etc.
-  - [x] Use WordPress' [built-in options functions](https://codex.wordpress.org/Creating_Options_Pages) to keep track of these
