@@ -139,6 +139,37 @@ Once the plugin is enabled, you will be able to call it with the shortcode:
 
 This is a very sophisticated example, but it should give you an idea of most of this plugin's functions.
 
+### User Loops
+
+```html
+<h3>Top Authors</h3>
+[userloop query="number=25&offset=1&orderby=post_count&order=DESC" avatar_size=64]
+  <div class="an-author-box">
+    <a href="{{ authorpage }}" class="author" title="Posts by {{ display_name|titlesafe }} ({{ posts }})">{{ avatar|raw }}</a>
+  </div>
+[/userloop]
+```
+
+This displays the avatars of 25 authors of the blog with a link to their page, ordered by number of posts (the most active posters at the top).
+
+### Taxonomy/Term Loops
+
+```html
+<h3>Popular Tags</h3>
+<ul>
+[termloop query="taxonomies=post_tag&orderby=count&order=desc&number=12"]
+  <li>
+    <a href="{{ link|raw }}" title="View all posts with the tag, {{ title|titlesafe }}">
+      <span class="tag-icon"> </span> {{ title }}
+      <span class="count">{{ count }}</span>
+    </a>
+  </li>
+[/termloop]
+</ul>
+```
+
+This tag returns the top 12 tags on the side, ordered by the number of posts with that tag.
+
 ## Arguments
 
 Required arguments:
@@ -336,6 +367,42 @@ The default template is:
 
 {{ custom }}                // If you have chosen to include custom fields, here's how you access them!
     {{ custom.myField }}    // If there'sa single value, this won't be an array, otherwise it will be
+```
+
+### Users
+
+```php
+{{ id }}                  // The user's ID
+{{ username }}            // Their username
+{{ nicename }}            // The "nice name" of the user (created by WordPress)
+{{ display_name}}         // The user's display name (which they select in options)
+{{ email }}               // User email address
+{{ url }}                 // User personal website, which they enter in their profile
+{{ joined }}              // The timestamp of the user's join date
+{{ posts }}               // Number of posts by the user
+{{ avatar }}              // The user's avatar image, generated with get_avatar()
+{{ authorpage }}          // The author's profile page on your website, typically showing a list of their posts
+{{ meta }}                // The author's meta data, generated with get_user_meta()
+  {{ meta.first_name }}
+  {{ meta.last_name }}
+  {{ meta.nickname }}
+  {{ meta.description }}  // Etc...
+```
+
+### Taxonomies/Terms
+
+```php
+{{ id }}      // The term's ID
+{{ name }}    // The term's display name
+{{ title }}   // Alias of name
+{{ slug }}    // The slug of a term (e.g. "Popular posts" slug would be popular-posts)
+{{ group }}
+{{ taxonomy_id }}
+{{ taxonomy }}
+{{ description }}
+{{ parent }}
+{{ count }}   // Number of posts in this term
+{{ link }}    // The link to the page displaying all posts from this term
 ```
 
 ## Custom Twig Helpers
