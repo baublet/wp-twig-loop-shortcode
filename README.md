@@ -449,11 +449,11 @@ Looks for an author with the id specified in the variable (in this instance, `ot
 
 # Todo
 
-- [ ] Installation instructions
-- [ ] Add some examples
+- [x] Installation instructions
+- [x] Add some examples
   - [X] Post loops
-  - [ ] User loops
-  - [ ] Taxonomy loops
+  - [x] User loops
+  - [x] Taxonomy loops
 - [x] Fix the bug with WordPress' notoriously annoying texturizing and prettying of my damned query strings...
   - I tried to reproduce this and failed...
 - [x] Add the ability to save templates in the tag to reduce code duplication
