@@ -45,7 +45,11 @@ To update the plugin to the latest version, ssh into your ```wp-content/plugins/
 git pull
 ```
 
-It will update the plugin to the latest version!
+It will update the plugin to the latest version. Also, don't forget to periodically update Twig via:
+
+```
+git pull --recurse-submodules
+```
 
 # Usage
 
