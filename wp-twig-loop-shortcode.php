@@ -22,7 +22,13 @@ require_once("lsc/LoopShortcodeTerms.php");
 require_once("menu/LoopShortcodeMenu.php");
 
 /**
- * Trying not to polute the global space here.
+ * TODO: Refactor so as to pollute the global namespace less
+ *
+ * Thoughts on doing this: inject an LSC registry into our shortcode constructor,
+ * and the shortcode classes only call the dependencies and load Twig into memory
+ * if those shortcodes are called. This way we can maintain our sharing of the
+ * Twig environment and other things without having so much of this plugin
+ * exposed to the global namespace.
  */
 
 $LoopShortcodeTemplates = new LoopShortcodeTemplates();

@@ -4,13 +4,13 @@
 
 Updated code comments and separated the backend interface into its own folder from the main LSC  files.
 
-#### June 3, 2016
+### June 3, 2016
 
 Added much in the way of documentation and improved the backend display a bit.
 
 ### TODO
 * Separate the admin menu markup and CSS in a more elegant manner
-* Update the way this plugin loads to use a global registry so that we don't pollute the global namespace, so we can load Twig only when we need it, and so we only have to load shortcodes we need. This is a fairly large project that is unnecessary with the use of caching, but it would be useful to do it for shared hosting environments with low memory and/or no caching abilities.
+* Update the way this plugin loads to use a global registry so that we don't pollute the global namespace, so we can load Twig only when we need it, and so we only have to load shortcodes we need, all while allowing us to continue sharing dependencies. This is a fairly large project that is unnecessary with the use of caching, but it would be useful to do it for shared hosting environments with low memory and/or no caching abilities.
 
 # Loop Shortcodes
 This WordPress plugin gives you the ability to call the Loop from shortcodes and style them using the [Twig template engine](http://twig.sensiolabs.org/). It allows you to use WordPress in a very frankenstein-like manner as a fairly powerful CMS, using inline templates in pages and posts which query other posts, users, and taxonomies on the fly.
@@ -35,11 +35,11 @@ git submodule update
 
 These commands navigate the SSH shell to the plugin directory and initiate the submodules. Then, git will download Twig from the Twig repo.
 
-Once all that is done, you can then turn on the plugin in your WordPress plugin directory.
+Once all that is done, you can then activate the plugin in your WordPress plugin directory. To validate that it's working, navigate to the Templates page in your WordPress admin menu, located in Appearance -> Loop Shortcode.
 
 ## Updates
 
-To update the plugin to the latest version, ssh into your ```wp-content/plugins/wp-twig-loop-shortcode/``` directory and simply type
+To update this plugin to the latest version, ssh into your ```wp-content/plugins/wp-twig-loop-shortcode/``` directory and type:
 
 ```
 git pull
@@ -205,7 +205,7 @@ Optional arguments:
 
 ### Environments
 
-Environments are optional features that help you reduce post duplication on pages with multiple query strings. Every environment is defined in loop shortcode you use. For example:
+Environments are optional features that help you reduce post duplication on pages with multiple query strings by saving the posts into a global registry that you can access in order to exclude posts from subsequent queries. Environments are defined directly on the shortcode. For example:
 
 ```
 [loop query="my query" environment="main-posts"]
@@ -213,7 +213,7 @@ Environments are optional features that help you reduce post duplication on page
 [/loop]
 ```
 
-This query parses `my query` (whatever you prefer here), and adds all of the post IDs it finds to an environment called `main-posts`. In the same page in another loop, you can recall this environment and exclude all posts already called up in that environment so that the posts you used before aren't duplicated elsewhere. To do so, you would use:
+This query parses `my query` (whatever you prefer here), and adds all of the post IDs it finds to an environment (a variable) called `main-posts`. In the same page in another loop, you can recall this environment and exclude all posts already called up in that environment, so that the posts you used before aren't duplicated elsewhere. To do so, you would use:
 
 ```
 [loop query="similar or same query to the above" environment="main-posts" recall_environment=1 recall_environment_type="post__not_in"]
@@ -228,26 +228,26 @@ In the backend, this means that each ID is added to a PHP associative array:
 environments['environment-name'] = array(post, ids, are, here, as_integers);
 ```
 
-Environments are created linearly (e.g., the first shortcode in the post code has first dibs on posts). You can also build environments without necessarily using them, as all posts are stored on a default environment called `loop_shortcode`. When you want to recall an environment, the plugin simply appends the following string to your query:
+Environments are created first-come-first-serve (e.g., the first shortcode in the post code has first dibs on posts). You can also build environments without necessarily using them, as all posts are stored on a default environment called `loop_shortcode`. When you want to recall an environment, the plugin simply appends the following string to your query:
 
 ```php
 $query .= "&{recall_environment_type}[]={environment_id}"
 ```
 
-It does this for each post in the environment. So, for example, if you want to exclude all the posts, you would use `recall_environment_type="post__not_in"` in your shortcode. Then, this query simply appends a bunch of posts for the WP_Query object to explicitly exclude from the current query.
+It does this for each post in the environment. So, for example, if you want to exclude all the posts, you would use `recall_environment_type="post__not_in"` in your shortcode. Then, this query simply appends a bunch of posts for the WP_Query object to *explicitly exclude from the current query*.
 
 ## Queries
 
-For the basics of WordPress queries using the WP Query object, see [the WordPress manual on WP_Query](https://codex.wordpress.org/Class_Reference/WP_Query). The object basically takes both arrays and query strings as a valid query on the database. A query string is basically a URI resource string.
+For the basics of WordPress queries using the WP Query object, see [the WordPress manual on WP_Query](https://codex.wordpress.org/Class_Reference/WP_Query). The WP Query object takes both arrays and query strings as a valid query on the database. With this plugin, you will be working with query strings. A query string is a URI resource string that can be parsed into a set of variables and arrays in PHP.
 
-Thus, `posts_per_page=10&cat=4,25,20,-410` is the PHP equivalent of:
+Thus, `posts_per_page=10&cat=4,25,20,-410` is the PHP equivalent of something like:
 
-```php
-    $posts_per_page = 10;
-    $cat = '4,25,20,-410';
+```
+    posts_per_page = 10
+    cat = 4,25,20,-410
 ```
 
-Similarly, you can use arrays for more advanced queries. To get around the fact that wordpress doesn't play nice when you use brackets ([ and ]) inside shortcodes, even if in quotations (I know, right?), you can use curly-brackets ({ and }) instead. For example:
+Similarly, you can use arrays for more advanced queries. To get around the fact that wordpress doesn't play nice when you use brackets (`[` and `]`) inside shortcodes, even if in quotations (I know, right?), you can use curly-brackets (`{` and `}`) instead. For example:
 
 ```
 posts_per_page=5&post_type=event&order=ASC&orderby=meta_value_num&meta_key=date&meta_query{0}{key}=date&meta_query{0}{value}={{lastweek}}&meta_query{0}{compare}={{>=}}&meta_query{0}{type}=numeric
@@ -273,13 +273,13 @@ This is the equivalent of passing the following arguments into the WP_Query obje
     );
 ```
 
-In simple terms, this query grabs five posts of the type "event" with the custom key named "date" (which in the backend, WordPress calls the meta key named "date") of between last week and forever into the future.
+This query grabs five posts of the type "event" with the custom key named "date" (which in the backend, WordPress calls the meta key named "date") of between last week and forever into the future.
 
-In real terms, this query loads five upcoming events, but keeps events for up to a week after they happen.
+In the above example, this query loads five upcoming events, but keeps events for up to a week after they happen.
 
-Getting your query right might take a lot of trial and error. Just play with it.
+Getting your query right might take some trial and error.
 
-### Query Helpers
+### Query String Helpers
 
 In the example above, you may have noticed that we used {{lastweek}} and {{>=}} in our query. We have to do things like this for a few reasons:
 
@@ -287,7 +287,7 @@ In the example above, you may have noticed that we used {{lastweek}} and {{>=}} 
 2. We need to strip out things that might mess up parsing your query string, like the `>=` symbol.
 3. It's really useful to have a few date helpers to query things based on dates!
 
-So this plugin provides a few helpers you can use in your query strings.
+So this plugin provides a few helpers you can use in your query strings. The following are in the order that the yare parsed by Loop Shortcode:
 
 ```html
 {{now}}                 // Time helpers. Returns straight up UNIX time stamps
@@ -301,11 +301,14 @@ So this plugin provides a few helpers you can use in your query strings.
 {{environments}}        // The custom environments string built by the plugin. This is not required for environments to work.
 
 {{any odd characters}}  // Any characters in double curly braces will be encoded using PHPs urlencode function
+                        // This includes things like equal signs that you don't want as part of the actual query string,
+                        // special characters, and anything else that you're afraid might not play nice with the way
+                        // PHP parses query strings
 
 {0}                     // And finally, in the last step, all single curly braces are converted into brackets ([ and ])
 ```
 
-This allows this:
+These helpers allow complex queries, such as:
 
 ```
 posts_per_page=5&post_type=event&order=ASC&orderby=meta_value_num&meta_key=date&meta_query{0}{key}=date&meta_query{0}{value}={{lastweek}}&meta_query{0}{compare}={{>=}}&meta_query{0}{type}=numeric
@@ -317,9 +320,26 @@ To be passed into a query object as:
 posts_per_page=5&post_type=event&order=ASC&orderby=meta_value_num&meta_key=date&meta_query[0][key]=date&meta_query[0][value]=1456442898&meta_query[0][compare]=%3E%3D&meta_query[0][type]=numeric
 ```
 
-## Templates
+Which PHP parses into something like:
 
-You can put anything inside the shortcode as a template. But without helpers, that means nothing! So this plugin provides you with a host of assorted helpers to help you build posts from the loop output.
+```
+  posts_per_page = 5
+  post_type = event
+  order = ASC
+  orderby = meta_value_num
+  meta_key = date
+  meta_query = [
+    [ key => date
+      value => 1456442898
+      compare => >=
+      type => numeric
+    ]
+  ]
+```
+
+## Templates and Styling
+
+You can put anything inside the shortcode tag as a template. This plugin provides you with a host of assorted variables and helpers to help you build posts from the loop output.
 
 The default template is:
 
