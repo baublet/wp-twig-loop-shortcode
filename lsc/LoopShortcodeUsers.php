@@ -1,4 +1,5 @@
 <?php
+require_once("LoopShortcodeBase.php");
 /* The basic loop shortcodes for posts of all post types */
 class LoopShortcodeUsers extends LoopShortcodeBase {
 
@@ -25,7 +26,7 @@ class LoopShortcodeUsers extends LoopShortcodeBase {
     // Check for results
     $users = $loopObject->get_results();
     if (!empty($users)) {
-        // loop trough each author
+        // Loop trough each author
       $output = '';
         foreach ($users as $user) {
         $data = get_userdata($user->ID);

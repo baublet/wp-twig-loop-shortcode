@@ -1,4 +1,6 @@
 <?php
+
+require_once("LoopShortcode.php");
 /*
   The basic class to work with Loop Shortcodes. Doesn't implement any
   logic functions. Leave that up to individual extensions of this.
@@ -87,7 +89,12 @@ class LoopShortcodeBase implements LoopShortcode {
 
   // Cleans the template for correct processing
   public function prepareTemplate($template = null) {
-    /* Because WordPress shortcodes aren't really made for Twig, we have to do some cleaning of the template so that when it does its own auto-p work, it doesn't mess up what's shown here. Also removes excess spaces for us poor designers... */
+    /*
+       Because WordPress shortcodes aren't really made for Twig,
+       we have to do some cleaning of the template so that when it does its own
+       auto-p work, it doesn't mess up what's shown here. Also removes excess
+       spaces for us poor designers...
+    */
     error_log('Original Template: ' . $template);
     if($template) {
       $this->template = $template;
@@ -104,8 +111,11 @@ class LoopShortcodeBase implements LoopShortcode {
       }
     }
     $this->template = str_replace("\t", ' ', $this->template);
-    // For some reason, WordPress sometimse texturizes and HTML entities stuff that we don't necessarily want prettified
-    // This replaces that with what is supposed to be there.
+    /*
+      For some reason, WordPress sometimse texturizes and HTML entities stuff
+      that we don't necessarily want prettified. This replaces that with what
+      is supposed to be there.
+    */
     $this->template = str_replace(array('&#8220;', '&#8221;'), '"' , $this->template);
     $this->template = str_replace(array('&#8216;', '&#8217;'), '\'' , $this->template);
     $this->template = preg_replace("/\s\s+/", " ", $this->template);
@@ -116,13 +126,14 @@ class LoopShortcodeBase implements LoopShortcode {
     $this->twig_environment->getLoader()->setTemplate($this->environment, $this->template);
   }
 
-  // Prepares the query for execution
+  /*
+  De-funkify and parse the query
+
+  This allows you make date comparisons within meta values. Can be used for,
+  e.g., showing events that have already happened for a week after they have happened.
+  For an example of this, see the documentation.
+  */
   public function prepareQuery() {
-    // de-funkify and parse the query
-    // This allows you make date comparisons within meta values
-    //	Can be used for, e.g., showing events that have already happened for a week
-    //	after they have happened
-    //echo $this->environment . '<br>';
     error_log('Environment: ' . $this->environment);
     error_log('Original Query: ' . $this->query);
     $thetime = time();

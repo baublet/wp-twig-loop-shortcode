@@ -99,7 +99,7 @@ class LoopShortcodeMenu {
             <h2>Loop Shortcodes  <a href="#new" class="page-title-action">Add New</a></h2>
             <hr>
             <div class="lsc-menu">
-              <span><strong>Templates</strong><em>(click to edit)</em><strong>:</strong></span>
+              <span><strong>Templates</strong> <em>(click to edit)</em><strong>:</strong></span>
               <?php foreach($this->templates->templates as $key => $template): ?>
                 <label for="<?=$template["slug"]?>" class="template-label"><?=$template["name"]?></label>
               <?php endforeach; ?>
