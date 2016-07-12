@@ -1,5 +1,9 @@
 # Changes
 
+## TODO
+* Separate the admin menu markup and CSS in a more elegant manner
+* Update the way this plugin loads to use a global registry so that we don't pollute the global namespace, so we can load Twig only when we need it, and so we only have to load shortcodes we need. This is a fairly large project that is unnecessary with the use of caching, but it would be useful to do it for shared hosting environments with low memory and/or no caching abilities.
+
 ### July 12, 2016
 
 Updated code comments and separated the backend interface into its own folder from the main LSC  files.
@@ -11,7 +15,7 @@ Added much in the way of documentation and improved the backend display a bit.
 # Loop Shortcodes
 This WordPress plugin gives you the ability to call the Loop from shortcodes and style them using the [Twig template engine](http://twig.sensiolabs.org/). It allows you to use WordPress in a very frankenstein-like manner as a fairly powerful CMS, using inline templates in pages and posts which query other posts, users, and taxonomies on the fly.
 
-**Note:** This is *not* intended to be used in production without significant caching. Running WordPress and Twig, compiling Twig templates, making multiple WordPress WP_Query objects, and parsing dozens of posts is memory and processor-intensive.
+**Note:** This is *not* intended to be used in production without some form of caching. Running WordPress and Twig, compiling Twig templates, making multiple WordPress WP_Query objects, and parsing dozens of posts is memory and processor-intensive.
 
 # Installation
 
