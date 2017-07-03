@@ -12,6 +12,7 @@ class LoopShortcodeMenu {
     public function __construct($templates) {
         add_action('admin_menu', array($this, 'create_menu'));
         $this->templates = $templates;
+	if(!isset($_GET["lsc-action"])) return;
         switch($_GET["lsc-action"]) {
             case "new":
                 if(isset($_POST["template"]) && isset($_POST["options"]))
