@@ -36,9 +36,15 @@ class LoopShortcodePosts extends LoopShortcodeBase {
 
     // Load the variables in the loop
     if ($loopObject->have_posts()):
-      foreach($loopObject->posts as $post):
+      $allPosts = $loopObject->posts;
+      $numPosts = count($allPosts);
+      foreach($allPosts as $key => $post):
         $twig_vars = array();
         // Setup all the variables
+        $twig_vars['first'] = $key == 0;
+        $twig_vars['last'] = $key + 1 == $numPosts;
+        $twig_vars['index'] = $key;
+        $twig_vars['results'] = $numPosts;
         $twig_vars['query'] = $query;
         $twig_vars['id'] = $post->ID;
         $twig_vars['title'] = $post->post_title;
@@ -106,6 +112,13 @@ class LoopShortcodePosts extends LoopShortcodeBase {
         foreach($custom_buffer as $key => $custom) {
           // Don't include internal meta values
           if(substr($key, 0, 1) == '_') continue;
+          // For each element, if it's serializeable, unserialize it
+          if(is_array($custom)) {
+              $custom = array_map(function($value) {
+                  $unserialized = @unserialize($value);
+                  return $unserialized === false ? $value : $unserialized;
+              }, $custom);
+          }
           // This makes it so you don't have to use {{ custom.myfield.0 }} for keys that only ever have one value
           if(is_array($custom)) {
             if(count($custom) > 1) {
