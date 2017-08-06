@@ -208,7 +208,8 @@ class LoopShortcodeBase implements LoopShortcode {
     }
     error_log('##########################');
     error_log(' ');
-    return $output;
+
+    return do_shortcode($output);
   }
 
   // This is called when we want to call up Twig to render our $twig_vars
